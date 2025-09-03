@@ -1,6 +1,6 @@
 "use client";
+
 import React from "react";
-import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { Phone, MapPin, Shield, Camera, Cloud, CarFront, CheckCircle2, Wrench, Star } from "lucide-react";
 
@@ -54,7 +54,9 @@ const GALLERY_IMAGES: { src: string; alt: string }[] = BRANDS.map((b) => ({ src:
 // Small UI helpers
 // -----------------------------
 
-const Stat = ({ icon: Icon, label }: { icon: LucideIcon; label: string }) => (
+type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+
+const Stat = ({ icon: Icon, label }: { icon: IconType; label: string }) => (
   <div className="flex items-center gap-2 text-sm md:text-base">
     <Icon className="h-5 w-5" aria-hidden />
     <span>{label}</span>
@@ -96,25 +98,13 @@ const PackageCard = ({ tier, bullets, badge }: { tier: string; bullets: string[]
   </motion.div>
 );
 
-const Feature = ({ icon: Icon, title, desc }: { icon: LucideIcon; title: string; desc: string }) => (
+const Feature = ({ icon: Icon, title, desc }: { icon: IconType; title: string; desc: string }) => (
   <div className="rounded-2xl border bg-white/80 backdrop-blur p-6 shadow-sm">
     <div className="flex items-center gap-3">
       <Icon className="h-6 w-6" />
       <h3 className="text-lg font-semibold">{title}</h3>
     </div>
     <p className="mt-3 text-sm text-neutral-700">{desc}</p>
-  </div>
-);
-
-const Testimonial = ({ quote, name }: { quote: string; name: string }) => (
-  <div className="rounded-2xl border bg-white/80 backdrop-blur p-6 shadow-sm">
-    <div className="flex items-center gap-1 text-amber-500" aria-hidden>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star key={i} className="h-4 w-4 fill-amber-500" />
-      ))}
-    </div>
-    <p className="mt-3 text-sm md:text-base">“{quote}”</p>
-    <p className="mt-2 text-xs text-neutral-500">— {name}</p>
   </div>
 );
 
@@ -126,13 +116,11 @@ export function runMockupTests() {
   const results: string[] = [];
 
   // Runtime / library checks
-  results.push(typeof window !== 'undefined' ? "✓ client runtime" : "ℹ server render");
-  const hasMotionDiv =
-  typeof (motion as unknown as Record<string, unknown>).div !== "undefined";
-results.push(hasMotionDiv ? "✓ framer-motion 'motion' available" : "✗ framer-motion motion is undefined");
-
-  const icons: LucideIcon[] = [Phone, MapPin, Shield, Camera, Cloud, CarFront, CheckCircle2, Wrench, Star];
-  results.push(icons.every((i) => typeof i === 'function') ? "✓ lucide icons loaded" : "✗ some lucide icons undefined");
+  results.push(typeof window !== "undefined" ? "✓ client runtime" : "ℹ server render");
+  const hasMotionDiv = typeof (motion as unknown as Record<string, unknown>).div !== "undefined";
+  results.push(hasMotionDiv ? "✓ framer-motion 'motion' available" : "✗ framer-motion motion is undefined");
+  const icons: IconType[] = [Phone, MapPin, Shield, Camera, Cloud, CarFront, CheckCircle2, Wrench, Star];
+  results.push(icons.every((i) => typeof i === "function") ? "✓ lucide icons loaded" : "✗ some lucide icons undefined");
 
   // Brand color set
   results.push(BRAND === "#3D9BE9" ? "✓ brand color set to #3D9BE9" : `✗ brand color incorrect: ${BRAND}`);
@@ -140,9 +128,7 @@ results.push(hasMotionDiv ? "✓ framer-motion 'motion' available" : "✗ framer
 
   // Brand links should be https and have images/alt text
   BRANDS.forEach((b, i) => {
-    results.push(
-      b.href.startsWith("https://") ? `✓ brand[${i}] link ok` : `✗ brand[${i}] link not https: ${b.href}`
-    );
+    results.push(b.href.startsWith("https://") ? `✓ brand[${i}] link ok` : `✗ brand[${i}] link not https: ${b.href}`);
     results.push(b.img ? `✓ brand[${i}] image ok` : `✗ brand[${i}] image missing`);
     results.push(b.alt ? `✓ brand[${i}] alt ok` : `✗ brand[${i}] alt missing`);
   });
@@ -299,7 +285,7 @@ export default function DashCamLandingMock() {
           <div className="mt-6 grid md:grid-cols-3 gap-6">
             <Feature icon={Camera} title="Single vs Dual" desc="Front‑only for basics, or add a rear camera for complete coverage." />
             <Feature icon={Shield} title="Parking Mode" desc="Hardwire for parked recording with safe low‑voltage cutoff or add a battery pack." />
-            <Feature icon={Cloud} title="Cloud / Live View" desc="Optional cloud features for alerts, viewing, and clips from LucideIconwhere." />
+            <Feature icon={Cloud} title="Cloud / Live View" desc="Optional cloud features for alerts, viewing, and clips from anywhere." />
           </div>
           <div className="mt-6">
             <a
