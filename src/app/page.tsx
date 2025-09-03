@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { Phone, MapPin, Shield, Camera, Cloud, CarFront, CheckCircle2, Wrench, Star } from "lucide-react";
 
@@ -53,7 +54,7 @@ const GALLERY_IMAGES: { src: string; alt: string }[] = BRANDS.map((b) => ({ src:
 // Small UI helpers
 // -----------------------------
 
-const Stat = ({ icon: Icon, label }: { icon: any; label: string }) => (
+const Stat = ({ icon: Icon, label }: { icon: LucideIcon; label: string }) => (
   <div className="flex items-center gap-2 text-sm md:text-base">
     <Icon className="h-5 w-5" aria-hidden />
     <span>{label}</span>
@@ -95,7 +96,7 @@ const PackageCard = ({ tier, bullets, badge }: { tier: string; bullets: string[]
   </motion.div>
 );
 
-const Feature = ({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) => (
+const Feature = ({ icon: Icon, title, desc }: { icon: LucideIcon; title: string; desc: string }) => (
   <div className="rounded-2xl border bg-white/80 backdrop-blur p-6 shadow-sm">
     <div className="flex items-center gap-3">
       <Icon className="h-6 w-6" />
@@ -126,9 +127,11 @@ export function runMockupTests() {
 
   // Runtime / library checks
   results.push(typeof window !== 'undefined' ? "✓ client runtime" : "ℹ server render");
-  // @ts-ignore - motion is an object with element factories
-  results.push((motion && typeof motion.div !== 'undefined') ? "✓ framer-motion 'motion' available" : "✗ framer-motion motion is undefined");
-  const icons: any[] = [Phone, MapPin, Shield, Camera, Cloud, CarFront, CheckCircle2, Wrench, Star];
+  const hasMotionDiv =
+  typeof (motion as unknown as Record<string, unknown>).div !== "undefined";
+results.push(hasMotionDiv ? "✓ framer-motion 'motion' available" : "✗ framer-motion motion is undefined");
+
+  const icons: LucideIcon[] = [Phone, MapPin, Shield, Camera, Cloud, CarFront, CheckCircle2, Wrench, Star];
   results.push(icons.every((i) => typeof i === 'function') ? "✓ lucide icons loaded" : "✗ some lucide icons undefined");
 
   // Brand color set
@@ -296,7 +299,7 @@ export default function DashCamLandingMock() {
           <div className="mt-6 grid md:grid-cols-3 gap-6">
             <Feature icon={Camera} title="Single vs Dual" desc="Front‑only for basics, or add a rear camera for complete coverage." />
             <Feature icon={Shield} title="Parking Mode" desc="Hardwire for parked recording with safe low‑voltage cutoff or add a battery pack." />
-            <Feature icon={Cloud} title="Cloud / Live View" desc="Optional cloud features for alerts, viewing, and clips from anywhere." />
+            <Feature icon={Cloud} title="Cloud / Live View" desc="Optional cloud features for alerts, viewing, and clips from LucideIconwhere." />
           </div>
           <div className="mt-6">
             <a
